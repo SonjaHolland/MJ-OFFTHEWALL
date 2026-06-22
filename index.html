@@ -74,7 +74,7 @@ html, body {
 /* Album bovenaan */
 #content {
     position: absolute;
-    top: 5%;
+    top: 4%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -82,16 +82,16 @@ html, body {
 }
 
 #album {
-    width: 45%;
-    max-width: 500px;
+    width: 55%;              /* GROTER GEMAAKT */
+    max-width: 650px;        /* GROTERE MAXIMALE GROOTTE */
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,.7);
+    box-shadow: 0 0 25px rgba(0,0,0,.8);
 }
 
 /* Knoppen onderaan */
 #bottomControls {
     position: absolute;
-    bottom: 60px; /* boven de LED strip */
+    bottom: 70px; /* boven de LED strip */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -100,27 +100,43 @@ html, body {
 }
 
 button {
-    margin-top: 15px;
-    padding: 15px 40px;
-    font-size: 26px;
+    margin-top: 12px;
+    padding: 10px 28px;      /* KLEINER GEMAAKT */
+    font-size: 22px;         /* KLEINER GEMAAKT */
     font-weight: bold;
     color: white;
-    background: red;
+
+    background: linear-gradient(#ff3b3b, #b30000); /* 3D kleurverloop */
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
+
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(255,0,0,.6);
-    transition: 0.2s;
+
+    /* 3D effect */
+    box-shadow:
+        0 4px 0 #660000,          /* onderrand */
+        0 8px 15px rgba(0,0,0,.5); /* diepe schaduw */
+
+    transition: 0.15s ease-in-out;
 }
 
 button:hover {
-    background: #cc0000;
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 0 #660000,
+        0 12px 20px rgba(0,0,0,.6);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow:
+        0 2px 0 #660000,
+        0 4px 10px rgba(0,0,0,.4);
 }
 
 #controls {
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 iframe {
@@ -225,4 +241,6 @@ document.getElementById("prevBtn").onclick = function() {
 
 </body>
 </html>
+
+
 
