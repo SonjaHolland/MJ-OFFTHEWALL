@@ -71,7 +71,7 @@ html, body {
     z-index: 3;
 }
 
-/* Album + knop layout */
+/* Album + knoppen */
 #content {
     position: absolute;
     top: 0;
@@ -92,11 +92,10 @@ html, body {
     box-shadow: 0 0 20px rgba(0,0,0,.7);
 }
 
-/* Play/Stop knop */
-#playBtn {
-    margin-top: 30px;
-    padding: 18px 50px;
-    font-size: 32px;
+button {
+    margin-top: 20px;
+    padding: 15px 40px;
+    font-size: 26px;
     font-weight: bold;
     color: white;
     background: red;
@@ -107,9 +106,14 @@ html, body {
     transition: 0.2s;
 }
 
-#playBtn:hover {
+button:hover {
     background: #cc0000;
     transform: scale(1.05);
+}
+
+#controls {
+    display: flex;
+    gap: 20px;
 }
 
 iframe {
@@ -130,42 +134,82 @@ iframe {
 <div id="tv">
     <div id="screen">
 
-        <!-- Album + Play knop -->
+        <!-- Album + knoppen -->
         <div id="content">
             <img id="album" src="Offthewall01.jpg">
-            <button id="playBtn">PLAY MUSIC</button>
+
+            <button id="playBtn">PLAY</button>
+
+            <div id="controls">
+                <button id="prevBtn">PREVIOUS</button>
+                <button id="nextBtn">NEXT</button>
+            </div>
         </div>
 
-        <!-- Hier komt de YouTube speler -->
-        <div id="playerContainer"></div>
+        <!-- YouTube player -->
+        <div id="player"></div>
 
     </div>
 </div>
 
-<script>
-let playing = false;
+<!-- YouTube API -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
+<script>
+let player;
+let isPlaying = false;
+
+const playlist = [
+    "Y6w6Rl0xu0E",
+    "5_inb06QAc0",
+    "_gI7x78FwdQ",
+    "13Fadvnj9Q8",
+    "LUDvEcNU2l0"
+];
+
+let currentIndex = 0;
+
+/* YouTube API maakt speler */
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '100%',
+        width: '100%',
+        videoId: playlist[currentIndex],
+        playerVars: {
+            controls: 0,
+            rel: 0,
+            modestbranding: 1
+        }
+    });
+}
+
+/* PLAY / PAUSE */
 document.getElementById("playBtn").onclick = function() {
 
-    const container = document.getElementById("playerContainer");
-
-    if (!playing) {
-        // START
-        container.innerHTML = `
-            <iframe 
-                src="https://www.youtube.com/embed/Y6w6Rl0xu0E?autoplay=1&controls=0&loop=1&playlist=Y6w6Rl0xu0E,5_inb06QAc0,_gI7x78FwdQ,13Fadvnj9Q8,LUDvEcNU2l0&rel=0&modestbranding=1&fs=1"
-                allow="autoplay; fullscreen"
-                allowfullscreen>
-            </iframe>
-        `;
-        document.getElementById("playBtn").innerText = "STOP MUSIC";
-        playing = true;
+    if (!isPlaying) {
+        player.playVideo();
+        document.getElementById("album").style.display = "none";
+        this.innerText = "PAUSE";
+        isPlaying = true;
     } else {
-        // STOP
-        container.innerHTML = "";
-        document.getElementById("playBtn").innerText = "PLAY MUSIC";
-        playing = false;
+        player.pauseVideo();
+        this.innerText = "PLAY";
+        isPlaying = false;
     }
+};
+
+/* NEXT SONG */
+document.getElementById("nextBtn").onclick = function() {
+    currentIndex = (currentIndex + 1) % playlist.length;
+    player.loadVideoById(playlist[currentIndex]);
+    if (isPlaying) player.playVideo();
+};
+
+/* PREVIOUS SONG */
+document.getElementById("prevBtn").onclick = function() {
+    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+    player.loadVideoById(playlist[currentIndex]);
+    if (isPlaying) player.playVideo();
 };
 </script>
 
